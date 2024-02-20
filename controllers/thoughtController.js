@@ -61,4 +61,49 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-}
+};
+
+module.exports = {
+ // POST to create a reaction stored in a single thought's reactions array field
+ async createReaction(req, res) {
+    try {
+        const { thoughtId } = req.params;
+        const { username, reactionBody } = req.body;
+
+        // Create a new reaction
+        const newReaction = {
+            username,
+            reactionBody,
+        };
+
+        // Update the thought's reactions array
+        const updatedThought = await Thought.findByIdAndUpdate(
+            thoughtId,
+            { $push: { reactions: newReaction } },
+            { new: true }
+        );
+
+        res.json(updatedThought);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+},
+
+// DELETE to pull and remove a reaction by the reaction's reactionId value
+async removeReaction(req, res) {
+    try {
+        const { thoughtId, reactionId } = req.params;
+
+        // Remove the reaction from the thought's reactions array
+        const updatedThought = await Thought.findByIdAndUpdate(
+            thoughtId,
+            { $pull: { reactions: { reactionId } } },
+            { new: true }
+        );
+
+        res.json(updatedThought);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+},
+};
