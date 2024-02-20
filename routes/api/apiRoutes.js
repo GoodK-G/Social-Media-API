@@ -15,7 +15,7 @@ const {
     removeThought,
     createReaction,
     removeReaction,
-} = require('../controllers'); // Import your controllers
+} = require('../../controllers'); // Import your controllers
 
 // /api/users
 router.get('/users', getAllUsers);
